@@ -1,5 +1,7 @@
 package com.example.hackathon;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -19,9 +21,11 @@ import java.util.List;
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageHolder> {
 
     List<String> list;
+    Context context;
 
-    public ImageAdapter(List<String> list) {
+    public ImageAdapter(List<String> list,Context context) {
         this.list = list;
+        this.context=context;
     }
 
     @NonNull
@@ -35,14 +39,18 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageHolder>
 
 
     @Override
-    public void onBindViewHolder(@NonNull ImageHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ImageHolder holder, final int position) {
 
 
-        new TestBack(holder.imgpdf).execute(new File("/document/primary:DCIM/Camera/"+list.get(position)));
+        new TestBack(holder.imgpdf).execute(new File("/storage/emulated/0/DCIM/Camera/"+list.get(position)));
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
+                Intent intent=new Intent(context,MainActivity2.class);
+                intent.putExtra("filename",list.get(position));
+                context.startActivity(intent);
+
+
             }
         });
 

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:color="@color/colorPrimaryDark">
+
+    <item
+        android:id="@+id/crop"
+        android:icon="@drawable/ic_crop_03"
+
+
+        android:title="Crop" />
+
+    <item
+        android:id="@+id/imageinsert"
+        android:icon="@drawable/ic_insert"
+
+        android:title="InsertImage" />
+
+    <item
+        android:id="@+id/textinsert"
+        android:icon="@drawable/ic_text_fields_01"
+         android:title="InsertText"
+        />
+    <item
+        android:id="@+id/doodle"
+        android:icon="@drawable/ic_pencil_04"
+
+        android:title="Doodle"
+        />
+    <item
+        android:id="@+id/color_pick"
+        android:icon="@drawable/ic_picker_01"
+        android:title="color_pick"
+        />
+    <item
+        android:id="@+id/color_replace"
+        android:icon="@drawable/color_replace"
+        android:title="color_replace"
+        />
+    <item
+        android:id="@+id/blur"
+        android:icon="@drawable/ic_blur_on_01"
+        android:title="blur"
+        />
+    <item
+        android:id="@+id/rotate"
+        android:icon="@drawable/ic_crop_rotate_01"
+        android:title="rotate"
+        />
+    <item
+        android:id="@+id/save"
+        android:icon="@drawable/ic_save"
+        android:title="save"/>
+
+    <item
+        android:id="@+id/filter"
+        android:icon="@drawable/ic_filter"
+        android:title="filer"/>
+
+</menu>
