@@ -28,6 +28,7 @@ import java.io.OutputStream;
 public class MainActivity2 extends AppCompatActivity {
 
     BottomNavigationView bottomNav;
+    BottomNavigationView bottomNavigationView1;
     Bitmap insertImage;
 
     @Override
@@ -35,10 +36,12 @@ public class MainActivity2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNavigationView1=findViewById(R.id.bottom_navigation1);
         Intent intent=getIntent();
         String filename=intent.getStringExtra("filename");
         View view=new ImageGame(this,filename);
         final com.example.hackathon.ImageGame y=(com.example.hackathon.ImageGame)findViewById(R.id.image_game);
+        y.setName(filename);
 
         bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -133,6 +136,55 @@ public class MainActivity2 extends AppCompatActivity {
 
 
                 return true;
+            }
+        });
+
+        bottomNavigationView1.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                switch (item.getItemId()){
+                    case R.id.color_replace:
+                        if(y.isColorreplace()){
+                            y.setColorreplace(false);
+                        }else{
+                            y.setColorreplace(true);
+                        }
+                        break;
+                    case R.id.blur:
+                        if(y.isBlur()){
+                            y.setBlur(false);
+                        }else{
+                            y.setBlur(true);
+                        }
+                        break;
+                    case R.id.rotate:
+                        if(y.isRotate()){
+                            y.setRotate(false);
+                        }else{
+                            y.setRotate(true);
+                            y.rotate();
+                        }
+                        break;
+
+                    case R.id.filter:
+                        if(y.isFilter()){
+                            y.setFilter(false);
+                        }else{
+                            y.setFilter(true);
+                            y.Filter();
+                        }
+
+                    case R.id.save:
+                        try {
+                            y.save();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                }
+                return true;
+
             }
         });
 

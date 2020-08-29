@@ -38,6 +38,11 @@ public class ImageGame extends View {
 
     Bitmap bitmap;
     String name;
+
+    public String getName() {
+        return name;
+    }
+
     Paint mDrawPaint = new Paint();
     Canvas mBitmapCanvas;
     boolean crop;
@@ -59,7 +64,7 @@ public class ImageGame extends View {
     Rect sourceRect;
     Paint paint;
     TextView textView;
-    int pixel,r,g,b,color;
+    int pixel, r, g, b, color;
     String hex;
     Rect rect1;
     Paint paint1;
@@ -70,6 +75,7 @@ public class ImageGame extends View {
     int prevright1;
     int prevbottom1;
     boolean filter;
+    Bitmap mDrawBitmap;
 
     public boolean isFilter() {
         return filter;
@@ -149,12 +155,10 @@ public class ImageGame extends View {
     boolean rotate;
 
 
-
     public ImageGame(Context context, String name) {
         super(context);
         this.name = name;
-        File file = new File("storage/emulated/0/DCIM/Camera/" + name);
-        bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+
 
     }
 
@@ -177,13 +181,20 @@ public class ImageGame extends View {
 
         if (bitmap == null) {
 
-            File file = new File("/document/primary:DCIM/Camera/" + name);
-            bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-            mBitmapCanvas = new Canvas(bitmap);
+            // File file = new File("/storage/emulated/0/DCIM/Camera/" + name);
+            // bitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+            mDrawBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+            mBitmapCanvas = new Canvas(mDrawBitmap);
 
         }
-        if(paint==null){
+        if (paint == null) {
             initialize();
+            File file = new File("/storage/emulated/0/DCIM/Camera/" + getName());
+            bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+
+            mBitmapCanvas.drawBitmap(bitmap, 0, 0, null);
+
+
         }
 
         if (doodle) {
@@ -199,7 +210,7 @@ public class ImageGame extends View {
         }
 
 
-        canvas.drawBitmap(bitmap, 0, 0, mDrawPaint);
+        canvas.drawBitmap(mDrawBitmap, 0, 0, mDrawPaint);
     }
 
     @Override
@@ -225,32 +236,32 @@ public class ImageGame extends View {
                     }
 
                 }
-                if(colorpick){
-                    pixel = bitmap.getPixel((int)event.getX(), (int) event.getY());
+                if (colorpick) {
+                    pixel = bitmap.getPixel((int) event.getX(), (int) event.getY());
 
                     r = Color.red(pixel);
                     g = Color.green(pixel);
                     b = Color.blue(pixel);
 
                     color = Color.TRANSPARENT;
-                    hex=String.format("#%06X", 0xFFFFFF & color);
-                    mBitmapCanvas.drawText("HEX : "+String.format("#%06X", 0xFFFFFF & color),200,200,paint);
-                }else{
-                    mBitmapCanvas.drawText("",200,200,paint);
+                    hex = String.format("#%06X", 0xFFFFFF & color);
+                    mBitmapCanvas.drawText("HEX : " + String.format("#%06X", 0xFFFFFF & color), 200, 200, paint);
+                } else {
+                    mBitmapCanvas.drawText("", 200, 200, paint);
 
                 }
-                if(colorreplace){
-                    for(int i=0;i<mBitmapCanvas.getWidth();i++){
-                        for(int j=0;j<mBitmapCanvas.getHeight();j++){
-                            int pixel = bitmap.getPixel((int)i ,(int) j);
-                           int  r = Color.red(pixel);
-                           int  g = Color.green(pixel);
+                if (colorreplace) {
+                    for (int i = 0; i < mBitmapCanvas.getWidth(); i++) {
+                        for (int j = 0; j < mBitmapCanvas.getHeight(); j++) {
+                            int pixel = bitmap.getPixel((int) i, (int) j);
+                            int r = Color.red(pixel);
+                            int g = Color.green(pixel);
                             int b = Color.blue(pixel);
 
-                         //  int color = Color.TRANSPARENT;
-                            String hex1= String.format("#%02X%02X%02X", r, g, b);
-                            if(hex.equals(hex1)){
-                                bitmap.setPixel(i,j,Color.parseColor(hex));
+                            //  int color = Color.TRANSPARENT;
+                            String hex1 = String.format("#%02X%02X%02X", r, g, b);
+                            if (hex.equals(hex1)) {
+                                bitmap.setPixel(i, j, Color.parseColor(hex));
                             }
                             invalidate();
 
@@ -258,7 +269,7 @@ public class ImageGame extends View {
                         }
                     }
                 }
-                if(crop){
+                if (crop) {
                     if (rect1.left < pointX && rect1.right > pointX && rect1.top < pointY && rect1.bottom > pointY) {
                         freeze = true;
                         Log.d("inside_touch", "yes");
@@ -269,14 +280,14 @@ public class ImageGame extends View {
                         freeze = false;
                     }
                 }
-                if(blur){
+                if (blur) {
                     //Point point=new Point((int)pointX,(int)pointY);
                     BlurMaskFilter blurFilter = new BlurMaskFilter(5, BlurMaskFilter.Blur.OUTER);
 
                     mDrawPaint.setMaskFilter(blurFilter);
                     invalidate();
 
-                }else{
+                } else {
                     mDrawPaint.setMaskFilter(null);
                 }
 
@@ -315,24 +326,27 @@ public class ImageGame extends View {
 
                 if (inserttext) {
                     mBitmapCanvas.drawText(textView.getText().toString(), pointX, pointY, paint);
-                }
-
-                if(colorpick){
-                     pixel = bitmap.getPixel((int)event.getX(), (int) event.getY());
-
-                     r = Color.red(pixel);
-                     g = Color.green(pixel);
-                     b = Color.blue(pixel);
-
-                     color = Color.TRANSPARENT;
-                     hex = String.format("#%02x%02x%02x", r, g, b);
-                    mBitmapCanvas.drawText("HEX : "+hex,200,200,paint);
                 }else{
-                    mBitmapCanvas.drawText("",200,200,paint);
+                    mBitmapCanvas.drawText("", pointX, pointY, paint);
 
                 }
 
-                if(crop){
+                if (colorpick) {
+                    pixel = bitmap.getPixel((int) event.getX(), (int) event.getY());
+
+                    r = Color.red(pixel);
+                    g = Color.green(pixel);
+                    b = Color.blue(pixel);
+
+                    color = Color.TRANSPARENT;
+                    hex = String.format("#%02x%02x%02x", r, g, b);
+                    mBitmapCanvas.drawText("HEX : " + hex, 200, 200, paint);
+                } else {
+                    mBitmapCanvas.drawText("", 200, 200, paint);
+
+                }
+
+                if (crop) {
                     if (freeze) {
                         centerx1 = rect1.centerX();
                         centery1 = rect1.centerY();
@@ -397,7 +411,7 @@ public class ImageGame extends View {
         rect.bottom = rect.top + 400;
         paint.setColor(Color.YELLOW);
         paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(10f);
+        paint.setStrokeWidth(3f);
         paint.setStrokeJoin(Paint.Join.ROUND);
 
         rect1 = new Rect();
@@ -441,14 +455,14 @@ public class ImageGame extends View {
 */
     }
 
-    public void rotate(){
+    public void rotate() {
         mBitmapCanvas.rotate(90);
         invalidate();
     }
 
     public void save() throws IOException {
         String path = "Last Shared File";
-        String name = "/" + "Transact/"+this.name;
+        String name = "/" + "Transact/" + this.name;
         File root = new File(getContext().getExternalFilesDir(path).getAbsolutePath() + name);
 
         FileOutputStream fOut = new FileOutputStream(root);
@@ -463,19 +477,18 @@ public class ImageGame extends View {
         getContext().startActivity(Intent.createChooser(sharingIntent, "Share image using"));
     }
 
-    public void cropimage(){
-        bitmap=Bitmap.createBitmap(bitmap, rect1.left,rect1.top,Math.abs(rect1.left - rect1.right), Math.abs(rect1.top - rect1.bottom));
+    public void cropimage() {
+        bitmap = Bitmap.createBitmap(bitmap, rect1.left, rect1.top, Math.abs(rect1.left - rect1.right), Math.abs(rect1.top - rect1.bottom));
         invalidate();
 
     }
 
-    public void Filter(){
-        bitmap= toGrayscale(bitmap);
+    public void Filter() {
+        bitmap = toGrayscale(bitmap);
         invalidate();
     }
 
-    public Bitmap toGrayscale(Bitmap bmpOriginal)
-    {
+    public Bitmap toGrayscale(Bitmap bmpOriginal) {
         int width, height;
         height = bmpOriginal.getHeight();
         width = bmpOriginal.getWidth();
@@ -491,7 +504,7 @@ public class ImageGame extends View {
         return bmpGrayscale;
     }
 
-    public void blur(){
+    public void blur() {
         //BlurMaskFilter blurFilter = new BlurMaskFilter(5, BlurMaskFilter.Blur.OUTER);
 
     }
@@ -508,9 +521,9 @@ public class ImageGame extends View {
         return byteBuffer.toByteArray();
     }
 
-    public void saveFile(byte[] decodedString,String extension) {
+    public void saveFile(byte[] decodedString, String extension) {
         String path = "Last Shared File";
-        String name = "/" + "Transact"+extension;
+        String name = "/" + "Transact" + extension;
         File root = new File(getContext().getExternalFilesDir(path).getAbsolutePath() + name);
         try {
             OutputStream fileOutputStream = new FileOutputStream(root);
@@ -521,10 +534,15 @@ public class ImageGame extends View {
         } catch (IOException e) {
             e.printStackTrace();
         }
-       // insertImage= BitmapFactory.decodeFile(root.getAbsolutePath());
+        // insertImage= BitmapFactory.decodeFile(root.getAbsolutePath());
       /*  RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"),root);
 
         multipartBody = MultipartBody.Part.createFormData("file",file.getName(),requestFile);*/
+
+    }
+
+    public void setName(String name){
+        this.name=name;
 
     }
 }

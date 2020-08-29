@@ -11,22 +11,31 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:background="#c6c6c6"
-            android:layout_gravity="bottom"
 
-            app:itemIconSize="40dp"
-            app:itemIconTint="@drawable/selector"
-
-
-            app:menu="@menu/bottom_nav_menu" />
         <com.example.hackathon.ImageGame
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/image_game"/>
     </LinearLayout>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation1"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_above="@id/bottom_navigation"
+        android:layout_marginBottom="100dp"
+        android:background="#c6c6c6"
+        android:layout_alignParentBottom="true"
+        app:itemIconSize="20dp"
+        app:itemIconTint="@drawable/selector"
+        app:menu="@menu/bottom_nav_menu1" />
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="#c6c6c6"
+        android:layout_alignParentBottom="true"
+        app:itemIconSize="20dp"
+        app:itemIconTint="@drawable/selector"
+        app:menu="@menu/bottom_nav_menu" />
 
 </RelativeLayout>
